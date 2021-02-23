@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropsTypes from 'prop-types';
 import Link from 'next/link';
-import {Menu} from 'antd';
-
+import {Menu, Input, Row, Col} from 'antd';
+import UserProfile from '../components/UserProfile';
+import LoginForm from '../components/LoginForm';
+import styled from 'styled-components';
+const SearchInput = styled(Input.Search)`
+  vertical-align: middle;
+`;
 const AppLayout = ({children}) => {
+    const [isLogedIn, setIsLogedIn] = useState(false)
     return (
         <div>
             <Menu mode="horizontal">
@@ -14,10 +20,24 @@ const AppLayout = ({children}) => {
                     <Link href="/profile"><a>프로필</a></Link>
                 </Menu.Item>
                 <Menu.Item>
+                    <SearchInput enterButton />
+                </Menu.Item>
+                <Menu.Item>
                     <Link href="/signup"><a>회원가입</a></Link>
                 </Menu.Item>
             </Menu>
-            {children}
+            <Row gutter={8}>
+                <Col xs={24} md={6}>
+                    {isLogedIn ? <UserProfile setIsLogedIn={setIsLogedIn}/> : <LoginForm setIsLogedIn={setIsLogedIn}/>}
+                </Col>
+                <Col xs={24} md={12} >
+                    {children}
+                </Col>
+                <Col xs={24} md={6}>
+                    <a href="https://kimnamkyu.github.io/portFolio/" target="_blank" rel="noreferrer noopener">southkyu portfolio</a>
+                </Col>
+            </Row>
+            
         </div>
     )
 }
