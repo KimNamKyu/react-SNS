@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from "prop-types";
 import Head from 'next/head';   //next에서 head를 바꿀수있도록 제공
 import 'antd/dist/antd.css';
+import wrapper from '../store/configureStore';
+
 //page들 공통부분처리
+//redux 에서는 provider로 감싸주나 next에서는 알아서 감싸준다.
 const App = ({Component}) => {
     return (
         <>
@@ -18,4 +21,4 @@ const App = ({Component}) => {
 App.propTypes = {
     Component: PropTypes.elementType.isRequired,
 }
-export default App;
+export default wrapper.withRedux(App) ;

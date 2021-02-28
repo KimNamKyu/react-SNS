@@ -5,11 +5,15 @@ import {Menu, Input, Row, Col} from 'antd';
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
 import styled from 'styled-components';
+import {useSelector} from 'react-redux';
+
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
 `;
 const AppLayout = ({children}) => {
-    const [isLogedIn, setIsLogedIn] = useState(false)
+    // const [isLogedIn, setIsLogedIn] = useState(false)
+    //reduce에서 data가져오기
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn)
     return (
         <div>
             <Menu mode="horizontal">
@@ -28,7 +32,7 @@ const AppLayout = ({children}) => {
             </Menu>
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLogedIn ? <UserProfile setIsLogedIn={setIsLogedIn}/> : <LoginForm setIsLogedIn={setIsLogedIn}/>}
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
                 <Col xs={24} md={12} >
                     {children}
