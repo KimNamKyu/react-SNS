@@ -1,5 +1,3 @@
-const { unique } = require("faker");
-
 //모델 생성
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', { // MySql에는 users로 적용
@@ -23,6 +21,13 @@ module.exports = (sequelize, DataTypes) => {
         charset: 'utf8',
         collate: 'utf8_general_ci', //한글저장
     });
-    User.associate = (db) => {};
+    User.associate = (db) => {
+        //관계형 설정
+        db.User.hasMany(db.Post);   // 1대다
+        db.User.hasMany(db.Comment);
+        db.User.belongsToMany(db.Post, {through: 'Like', as: 'Liked'})
+        db.User.belongsToMany(db.User, {through: 'Follow', as: 'Followers',foreignKey: 'FollowingId'})
+        db.User.belongsToMany(db.User, {through: 'Follow', as: 'Followings',foreignKey: 'FollowerId'})
+    };
     return User;
 }

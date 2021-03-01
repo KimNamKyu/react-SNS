@@ -6,11 +6,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(20),
             allowNull: false,
         },
+        // belongsToMany(다대다 관계)
+        // 중간테이블 메핑테이블이 생성되어 검색(조회)
     },{
         //두번째 객체는 유저 모델에 대한 셋팅
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci', //한글저장
     });
-    Hashtag.associate = (db) => {};
+    Hashtag.associate = (db) => {
+        db.Hashtag.belongsToMany(db.Post, {through: 'PostHashtag'})
+    };
     return Hashtag;
 }
