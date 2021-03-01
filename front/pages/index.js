@@ -9,7 +9,7 @@ import { LOAD_POSTS_REQUEST } from '../reducers/post';
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePost, loadPostsLoading } = useSelector((state) => state.post);
+  const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
 
   useEffect(() => {
     dispatch({
@@ -20,19 +20,19 @@ const Home = () => {
   useEffect(() => {
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-        if (hasMorePost && !loadPostsLoading) {
+        if (hasMorePosts && !loadPostsLoading) {
           dispatch({
             type: LOAD_POSTS_REQUEST,
-            data: mainPosts[mainPosts.length - 1].id,
+            // data: mainPosts[mainPosts.length - 1].id,
           });
         }
       }
     }
     window.addEventListener('scroll', onScroll);
-    return () => {
+    return () => {  //스코롤 햇던거 해제 willunmount
       window.removeEventListener('scroll', onScroll);
     };
-  }, [mainPosts, hasMorePost, loadPostsLoading]);
+  }, [mainPosts, hasMorePosts, loadPostsLoading]);
 
   return (
     <AppLayout>

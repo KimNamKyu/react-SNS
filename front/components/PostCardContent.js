@@ -17,7 +17,7 @@ const PostCardContent = ({ postData }) => (
         );
       }
       return v;
-     })}
+    })}
   </div>
 );
 

@@ -1,8 +1,8 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Form, Input, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ADD_POST_REQUEST } from '../reducers/post';
+import { addPost, ADD_POST_REQUEST } from '../reducers/post';
 import useInput from '../hooks/useInput';
 
 const PostForm = () => {
@@ -10,36 +10,23 @@ const PostForm = () => {
   const [text, onChangeText, setText] = useInput('');
   const { imagePaths, addPostLoading, addPostDone } = useSelector((state) => state.post);
 
-  const imageInput = useRef();
-  const onClickImageUpload = useCallback(() => {
-    imageInput.current.click();
-  }, [imageInput.current]);
-
   useEffect(() => {
     if (addPostDone) {
       setText('');
     }
   }, [addPostDone]);
 
-  const onSubmitForm = useCallback(() => {
-    if (!text || !text.trim()) {
-      return alert('게시글을 작성하세요.');
-    }
-    const formData = new FormData();
-    imagePaths.forEach((p) => {
-      formData.append('image', p);
-    });
-    formData.append('content', text);
-    dispatch({
-      type: ADD_POST_REQUEST,
-      data: {
-        text,
-      },
-    });
-  }, []);
+  const onSubmit = useCallback(() => {
+    dispatch(addPost(text));
+  }, [text]);
+
+  const imageInput = useRef();
+  const onClickImageUpload = useCallback(() => {
+    imageInput.current.click();
+  }, [imageInput.current]);
 
   return (
-    <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmitForm}>
+    <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
       <Input.TextArea maxLength={140} placeholder="어떤 신기한 일이 있었나요?" value={text} onChange={onChangeText} />
       <div>
         <input type="file" multiple hidden ref={imageInput} />
