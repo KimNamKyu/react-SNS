@@ -1,25 +1,28 @@
-import { Button, Form, Input } from "antd";
-import { useCallback } from "react";
-import useInput from "../hooks/useInput";
+import React from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { useSelector } from "react-redux";
-import Link from "next/link";
 
-const PostCardContent = ({postData}) => {
-    return (
-        <div>
-            {postData.split(/(#[^\s#]+)/g).map((v, i) => {
-                if(v.match(/(#[^\s#]+)/)) {
-                    return <Link href={`/hashtag/${v.slice(1)}`} key={i}><a>{v}</a></Link>
-                }
-                return v;
-            })}
-        </div>  
-    )
-}
+const PostCardContent = ({ postData }) => (
+  <div>
+    {postData.split(/(#[^\s#]+)/g).map((v) => {
+      if (v.match(/(#[^\s#]+)/)) {
+        return (
+          <Link
+            href={{ pathname: '/hashtag', query: { tag: v.slice(1) } }}
+            as={`/hashtag/${v.slice(1)}`}
+            key={v}
+          >
+            <a>{v}</a>
+          </Link>
+        );
+      }
+      return v;
+     })}
+  </div>
+);
 
-PostCardContent.PropTypes = {
-    postData: PropTypes.string.isRequired
-}
+PostCardContent.propTypes = {
+  postData: PropTypes.string.isRequired,
+};
 
 export default PostCardContent;
