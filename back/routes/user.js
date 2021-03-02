@@ -1,8 +1,55 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const {User} = require('../models');
+const {User, Post} = require('../models');
+const passport = require('passport');
 const router = express.Router();
+const {isLoggedIn,isNotLoggedIn} = require('./middlewares')
 
+//로그인  미들웨어 확장
+router.post('/login', isNotLoggedIn, (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if(err) {
+            //서버 에러
+            console.log('=======================')
+            console.error(err);
+            return next(err);  //
+        }
+        if(info) {
+            //클라이언트에러
+            return res.status(401).send(info.reason);
+        }
+        return req.login(user, async (loginErr) => {
+            if(loginErr) {
+                console.error(loginErr);
+                return next(loginErr);
+            }
+            const fullUserWithoutPassword = await User.findOne({
+                where: {id: user.id},
+                attributes: {
+                    exclude: ['password']
+                },//['id', 'nickname', 'email'],    //제외하고 가져옴.
+                include: [{ //관계매핑 가져오기
+                    model: Post,
+                }, {
+                    model: User,
+                    as: 'Followings',
+                }, {
+                    model: User,
+                    as: 'Followers',
+                }]
+            })
+            return res.status(200).json(fullUserWithoutPassword);
+        })
+    })(req, res, next);
+} )
+
+router.post('/logout', isLoggedIn, (req, res, next) => {
+    req.logout();
+    req.session.destroy();
+    res.send('ok');
+})
+
+//회원가입
 //async await 순서 문제 해결됨
 router.post('/', async (req, res, next) => {
     try {
@@ -20,8 +67,10 @@ router.post('/', async (req, res, next) => {
         res.status(201).send('ok');
     } catch (error) {
         console.error(error);
-        next(error);    //status 500 서버 에러
+        next(error);    //status 500 서버 에러 express가 에러처리하게
     }
 });
+
+
 
 module.exports = router;

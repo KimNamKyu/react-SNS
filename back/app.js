@@ -8,13 +8,20 @@ const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const cors = require('cors');
 const db = require('./models')
+const passportConfig = require('./passport');
+const passport = require('passport');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
 const app = express();
 
+dotenv.config();
 db.sequelize.sync()
     .then(() => {
         console.log('db 연결 성공')
     })
     .catch(console.error);
+passportConfig();
 
 app.use(cors({
     orgin: '*',
@@ -23,6 +30,17 @@ app.use(cors({
 //프런트에서 받은 데이터를 해석
 app.use(express.json());    //프런트에서 json형식의 데이터를 req.body에 넣어줌
 app.use(express.urlencoded({extended: true}));  //form.submit 했을때 처리
+
+//로그인 시 브라우저와 서버가 같은 정보를 가지고있어야함
+app.use(cookieParser('nodebirdsecret'));
+//session 설정
+app.use(session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,  //쿠키에 랜덤한 키 
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/post', postRouter);
 app.use('/user', userRouter);
