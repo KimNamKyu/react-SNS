@@ -5,6 +5,37 @@ const passport = require('passport');
 const router = express.Router();
 const {isLoggedIn,isNotLoggedIn} = require('./middlewares')
 
+router.get('/', async (req, res, next) => {
+    try {
+        if(req.user){
+            const fullUserWithoutPassword = await User.findOne({
+                where: {id: req.user.id},
+                attributes: {
+                    exclude: ['password']
+                },//['id', 'nickname', 'email'],    //제외하고 가져옴.
+                include: [{ //관계매핑 가져오기
+                    model: Post,
+                    attributes: ['id']
+                }, {
+                    model: User,
+                    as: 'Followings',
+                    attributes: ['id']
+                }, {
+                    model: User,
+                    as: 'Followers',
+                    attributes: ['id']
+                }]
+            })
+            res.status(200).json(fullUserWithoutPassword);    
+        }else{
+            res.status(200).json(null);
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);   
+    }
+})
+
 //로그인  미들웨어 확장
 router.post('/login', isNotLoggedIn, (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
@@ -30,12 +61,15 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
                 },//['id', 'nickname', 'email'],    //제외하고 가져옴.
                 include: [{ //관계매핑 가져오기
                     model: Post,
+                    attributes: ['id']
                 }, {
                     model: User,
                     as: 'Followings',
+                    attributes: ['id']
                 }, {
                     model: User,
                     as: 'Followers',
+                    attributes: ['id']
                 }]
             })
             return res.status(200).json(fullUserWithoutPassword);

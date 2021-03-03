@@ -5,6 +5,12 @@ import userSaga from './user';
 
 axios.defaults.baseURL = 'http://localhost:3065';
 
+
+/**
+ * 브라우저와 백엔드 간의 통신을 위해 쿠키도 전달해주어야한다.
+ */
+axios.defaults.withCredentials = true;
+
 export default function* rootSaga() {
   yield all([
     fork(postSaga),

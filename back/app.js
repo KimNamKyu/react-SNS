@@ -5,6 +5,7 @@
 // })  //자바스크립트 로 코딩 후 app.js실행 시 노드 런타임이 코드를 실행해서 http가 서버 역할을 해줌
 const express = require('express');
 const postRouter = require('./routes/post');
+const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
 const cors = require('cors');
 const db = require('./models')
@@ -13,6 +14,7 @@ const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
 const app = express();
 
 dotenv.config();
@@ -23,9 +25,10 @@ db.sequelize.sync()
     .catch(console.error);
 passportConfig();
 
+app.use(morgan('dev'));
 app.use(cors({
-    orgin: '*',
-    credentials: false, //나중에 true
+    origin: 'http://localhost:3060',
+    credentials: true, // 쿠키 전달
 }));
 //프런트에서 받은 데이터를 해석
 app.use(express.json());    //프런트에서 json형식의 데이터를 req.body에 넣어줌
@@ -42,6 +45,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/posts', postsRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
 
