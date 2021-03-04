@@ -50,8 +50,6 @@ const PostCard = ({ post }) => {
   }, [id]);
 
   const liked = post.Likers.find((v) => v.id === id);
-  console.log(post)
-  console.log(liked)
   return (
     <CardWrapper key={post.id}>
       <Card
