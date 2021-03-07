@@ -35,6 +35,9 @@ export const initialState = {
   retweetLoading: false,
   retweetDone: false,
   retweetError: null,
+  updatePostLoading: false,
+  updatePostDone: false,
+  updatePostError: null,
 };
 
 export const generateDummyPost = (number) => Array(number).fill().map(() => ({
@@ -100,6 +103,10 @@ export const RETWEET_REQUEST = 'RETWEET_REQUEST';
 export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
 export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
+export const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST';
+export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
+export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE';
+
 export const REMOVE_IMAGE = 'REMOVE_IMAGE'; //동기액션
 
 export const addPost = (data) => ({
@@ -115,6 +122,20 @@ export const addComment = (data) => ({
 // 이전 상태를 액션을 통해 다음 상태로 만들어내는 함수(불변성은 지키면서)
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
+    case UPDATE_POST_SUCCESS:
+      draft.updatePostLoading = false;
+      draft.updatePostDone = true;
+      draft.mainPosts.find((v) => v.id === action.data.PostId).content = action.data.content;
+      break;
+    case UPDATE_POST_FAILURE:
+      draft.updatePostLoading = false;
+      draft.updatePostError = action.error;
+      break;
+    case REMOVE_POST_REQUEST:
+      draft.removePostLoading = true;
+      draft.removePostDone = false;
+      draft.removePostError = null;
+      break;
     case RETWEET_REQUEST:
       draft.retweetLoading = true;
       draft.retweetDone = false;

@@ -35,8 +35,29 @@ import {
   LOAD_HASHTAG_POSTS_REQUEST, 
   LOAD_HASHTAG_POSTS_SUCCESS,
   LOAD_USER_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS,
+  UPDATE_POST_REQUEST, UPDATE_POST_SUCCESS, UPDATE_POST_FAILURE
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
+
+function updatePostAPI(data) {
+  return axios.patch(`post/${data.PostId}`, data);
+}
+
+function* updatePost(action) {
+  try {
+    const result = yield call(updatePostAPI, action.data);
+    yield put({
+      type: UPDATE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPDATE_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function retweetAPI(data) {
   return axios.post(`/post/${data}/retweet`);
@@ -317,8 +338,13 @@ function* watchLoadUserPosts() {
   yield throttle(5000, LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
 
+function* watchUpdatePost() {
+  yield takeLatest(UPDATE_POST_REQUEST, updatePost);
+}
+
 export default function* postSaga() {
   yield all([
+    fork(watchUpdatePost),
     fork(watchRetweet),
     fork(watchUploadImages),
     fork(watchLikePost),

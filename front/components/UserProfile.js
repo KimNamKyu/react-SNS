@@ -1,4 +1,5 @@
 import { Avatar, Card, Button } from 'antd';
+import Link from 'next/link';
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -14,12 +15,13 @@ const UserProfile = () => {
     });
   }, []);
 
+  
   return (
     <Card
       actions={[
-        <div key="twit">짹짹<br />{me.Posts.length}</div>,
-        <div key="following">팔로잉<br />{me.Followings.length}</div>,
-        <div key="follower">팔로워<br />{me.Followers.length}</div>,
+        <div key="twit"><Link href={`/user/${me.id}`}>짹짹</Link><br />{me.Posts.length}</div>,
+        <div key="following"><Link href={`/profile`}>팔로잉</Link><br />{me.Followings.length}</div>,
+        <div key="follower"><Link href={`/profile`}>팔로워</Link><br />{me.Followers.length}</div>,
       ]}
     >
       <Card.Meta

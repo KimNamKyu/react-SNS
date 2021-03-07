@@ -38,7 +38,7 @@ const AppLayout = ({children}) => {
                     />
                 </Menu.Item>
                 <Menu.Item>
-                    <Link href="/signup"><a>회원가입</a></Link>
+                    { !me && <Link href="/signup"><a>회원가입</a></Link>}
                 </Menu.Item>
             </Menu>
             <Row gutter={8}>
