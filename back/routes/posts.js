@@ -7,7 +7,6 @@ const { Post, Image, User, Comment } = require('../models');
 
 router.get('/', async (req, res, next) => {
     try {
-        console.log('posts')
         const where = {}
         if (parseInt(req.query.lastId, 10)) {   //초기 로딩이 아닐때
             where.id = {[Op.lt]: parseInt(req.query.lastId, 10)}    //id가 라스트아이디보다 작은걸로 10개 불러옴

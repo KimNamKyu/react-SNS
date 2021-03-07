@@ -11,6 +11,9 @@ import PostCardContent from './PostCardContent';
 import PostImages from './PostImages';
 import FollowButton from './FollowButton';
 import { REMOVE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
+import moment from 'moment';
+
+moment.locale('ko');
 
 const CardWrapper = styled.div`
   margin-bottom: 20px;
@@ -67,6 +70,7 @@ const PostCard = ({ post }) => {
     })
   },[id])
   const liked = post.Likers.find((v) => v.id === id);
+
   return (
     <CardWrapper key={post.id}>
       <Card
@@ -103,20 +107,32 @@ const PostCard = ({ post }) => {
             <Card
             cover={post.Images[0] && <PostImages images={post.Images} />}
             >
+              <div style={{float:'right'}}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
               <Card.Meta
-                avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                avatar={
+                  <Link href={`/user/${post.Retweet.User.id}`}>
+                    <Avatar>{post.User.nickname[0]}</Avatar>
+                  </Link>
+                }
                 title={post.User.nickname}
                 description={<PostCardContent postData={post.content} />}
               />
             </Card>
           )
           : (
-            <Card.Meta
-              avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-              title={post.User.nickname}
-              description={<PostCardContent postData={post.content} />}
-            />
-          )}
+            <>
+              <div style={{float:'right'}}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
+              <Card.Meta
+                avatar={
+                  <Link href={`/user/${post.User.id}`}>
+                      <Avatar>{post.User.nickname[0]}</Avatar>
+                  </Link>
+                }
+                title={post.User.nickname}
+                description={<PostCardContent postData={post.content} />}
+              />
+            </>
+            )}
       </Card>
       {commentFormOpened && (
         <>
@@ -130,7 +146,7 @@ const PostCard = ({ post }) => {
                 <Comment
                   author={item.User.nickname}
                   avatar={(
-                    <Link href={{ pathname: '/user', query: { id: item.User.id } }} as={`/user/${item.User.id}`}>
+                    <Link href={`/user/${item.User.id}`}>
                       <a><Avatar>{item.User.nickname[0]}</Avatar></a>
                     </Link>
                   )}
