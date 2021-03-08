@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 // 결과값만 Controller로 리턴
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  getHello() {
+    return process.env.SECRECT;
   }
 }
