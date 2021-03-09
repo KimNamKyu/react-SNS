@@ -1,7 +1,7 @@
 import { Injectable, Logger, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
 
-@Injectable()
+@Injectable()   // DI 와 관련 => providers
 export class LoggerMiddleware implements NestMiddleware {
     //implements => 반드시 구현
     private logger = new Logger('HTTP'); 

@@ -7,7 +7,7 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 @Module({
   imports: [ConfigModule.forRoot()],  //forRoot 설정을 넣어주기위해 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService],  //providers에 연결되 있는것을 보고 DI 의존성주입을 해준다.
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer): any {
