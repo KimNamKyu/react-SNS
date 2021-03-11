@@ -3,9 +3,11 @@ import { ConfigModule } from '@nestjs/config';  //.env 사용하기 위해 nestj
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { UsersModule } from './users/users.module';
+import { WorkspacesModule } from './workspaces/workspaces.module';
 
 @Module({
-  imports: [ConfigModule.forRoot()],  //forRoot 설정을 넣어주기위해 
+  imports: [ConfigModule.forRoot(), UsersModule, WorkspacesModule],  //forRoot 설정을 넣어주기위해 
   controllers: [AppController],
   providers: [AppService],  //providers에 연결되 있는것을 보고 DI 의존성주입을 해준다.
 })
