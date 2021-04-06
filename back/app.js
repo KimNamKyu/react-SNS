@@ -29,7 +29,7 @@ passportConfig();
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: 'http://localhost:3060',
+    origin: 'http://localhost:3000',
     credentials: true, // 쿠키 전달
 }));
 //프런트에서 받은 데이터를 해석
