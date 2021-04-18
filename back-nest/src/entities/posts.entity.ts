@@ -32,7 +32,7 @@ export class Posts {
     @OneToMany(() => Images, image => image.id)
     image: Images[];
 
-    @ManyToMany(() => Users, user => user.id)
-    @JoinTable({name:'Like'})
-    Like: Users[] 
+    // @ManyToMany(() => Users, user => user.id)
+    // @JoinTable({name:'Like', referencedColumnName: 'id'})
+    // Like: Users[] 
 }

@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Posts } from "./posts.entity";
 
 @Entity()
@@ -15,7 +15,7 @@ export class Images {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToOne(() => Posts, post => post.id)
+    @ManyToOne(() => Posts, post => post.id)
     @JoinColumn()
     post: Posts[];
 }
