@@ -28,26 +28,31 @@ export class Users {
     @OneToMany(() => Comments, comment => comment.id)
     comment: Comments[];
 
-    // @ManyToMany(() => Posts, post => post.id)
-    // @JoinTable({
-    //     name:'Like',
-    //     joinColumn: {
-    //         name: 'UserId',
-    //         referencedColumnName:'id',
-    //     },
-    //     inverseJoinColumn: {
-    //         name: 'PostId',
-    //         referencedColumnName: 'id',
-    //     }
-    // })
-    // Like: Posts[] 
+    @ManyToMany(() => Posts, post => post.id)
+    @JoinTable({
+        name:'Like',
+        joinColumn: {
+            name: 'UserId',
+            referencedColumnName:'id',
+        },
+        inverseJoinColumn: {
+            name: 'PostId',
+            referencedColumnName: 'id',
+        }
+    })
+    Like: Posts[] 
 
-    // @JoinTable({
-    //     name: 'Follow',
-    //     joinColumn: {
-    //         name: 'followers',
-    //         referencedColumnName: 'followings',
-    //     },
-    // })
-    // Follow: Users[];
+    @ManyToMany(() => Users, user => user.id)
+    @JoinTable({
+        name: 'Follow',
+        joinColumn: {
+            name: 'FollowingId',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'FollowerId',
+            referencedColumnName: 'id',
+        }
+    })
+    Follow: Users[];
 }

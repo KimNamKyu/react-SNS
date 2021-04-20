@@ -17,7 +17,7 @@ import { UserModule } from './user/user.module';
       password: "1234",
       database: "nestgram",
       entities: [Users, Posts, Comments, Hashtags, Images],
-      synchronize: true,
+      synchronize: false,
       autoLoadEntities: true,
       charset: 'utf8mb4',
       logging: true,

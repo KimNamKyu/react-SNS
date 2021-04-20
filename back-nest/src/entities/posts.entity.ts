@@ -22,7 +22,7 @@ export class Posts {
     @JoinColumn()
     user: Users[];
 
-    @ManyToMany(() => Hashtags, hashtag => hashtag.id)
+    @ManyToMany(() => Hashtags, hashtag => hashtag.name, {  nullable: false, onDelete: 'CASCADE' })
     @JoinTable({name:'PostHashtag'})
     Hashtag: Hashtags[]; 
 
@@ -32,7 +32,6 @@ export class Posts {
     @OneToMany(() => Images, image => image.id)
     image: Images[];
 
-    // @ManyToMany(() => Users, user => user.id)
-    // @JoinTable({name:'Like', referencedColumnName: 'id'})
-    // Like: Users[] 
+    @ManyToMany(() => Users, user => user.id)
+    Like: Users[] 
 }

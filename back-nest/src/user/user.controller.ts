@@ -1,19 +1,32 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, NotFoundException, Post, Req } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './interfaces/user.interface';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService) {}    //생성자주입
 
-    @Post()
+    @Post('')
     async create(@Body() createUserDto: CreateUserDto) {
-        this.userService.create(createUserDto);
+        const user = this.userService.findByEmail(createUserDto.email)
+        if(!user){
+            throw new NotFoundException();
+        }
+        const result = await this.userService.join(
+            createUserDto.email,
+            createUserDto.nickname,
+            createUserDto.password,
+        )
+        if(result){
+            return 'ok';
+        }else{
+            throw new ForbiddenException();
+        }
+        // this.userService.create(createUserDto);
     }
 
-    @Get()
-    async findAll(): Promise<User[]> {
-        return this.userService.findAll();
-    }
+    // @Get()
+    // async findAll(): Promise<User[]> {
+    //     return this.userService.findAll();
+    // }
 }
