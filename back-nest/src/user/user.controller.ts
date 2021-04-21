@@ -1,4 +1,5 @@
 import { Body, Controller, ForbiddenException, Get, NotFoundException, Post, Req } from '@nestjs/common';
+import { Users } from 'src/entities/users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
@@ -25,8 +26,17 @@ export class UserController {
         // this.userService.create(createUserDto);
     }
 
-    // @Get()
-    // async findAll(): Promise<User[]> {
-    //     return this.userService.findAll();
-    // }
+    @Get('/login')
+    async login(@Req() createUserDto: CreateUserDto){
+        const result = await this.userService.login(
+            createUserDto.email,
+            createUserDto.password,
+        )
+        if(result){
+            return '로그인 성공';
+        }else{
+            throw new ForbiddenException();
+        }
+        
+    }
 }

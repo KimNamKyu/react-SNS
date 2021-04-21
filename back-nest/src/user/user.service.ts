@@ -9,16 +9,7 @@ import { Repository } from 'typeorm';
 export class UserService {
     @InjectRepository(Users) private readonly userRepository: Repository<Users>;
 
-    // create(user: User) {
-    //     this.users.push(user)
-    //     console.log(this.users)
-    // }
-
-    // findAll(): User[] {
-    //     return this.users;
-    // }
     async join(email:string, nickname:string, password: string) {
-        console.log(this.userRepository)
         const user = await this.userRepository.findOne({where: {email}});
         if(user) return false;
         return await this.userRepository.save({
@@ -34,4 +25,13 @@ export class UserService {
             select: ['id', 'email', 'password'],
         })
     }
+    async login(email:string, password:string){
+        const user = await this.userRepository.findOne(email)
+        if(user && user.password === password) {
+            const { password, ...result } = user;
+            return result;
+        }
+        return null;
+    }
+    // async modifyNicName()
 }

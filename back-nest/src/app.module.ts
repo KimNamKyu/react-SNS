@@ -6,6 +6,7 @@ import { Images } from './entities/images.entity';
 import { Posts } from './entities/posts.entity';
 import { Users } from './entities/users.entity';
 import { UserModule } from './user/user.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { UserModule } from './user/user.module';
       logging: true,
       keepConnectionAlive: true,
     }),
-    UserModule
+    UserModule,
+    PostModule,
   ],
 })
 export class AppModule {}
