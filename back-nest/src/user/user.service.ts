@@ -26,12 +26,11 @@ export class UserService {
         })
     }
     async login(email:string, password:string){
-        const user = await this.userRepository.findOne(email)
+        const user = await this.userRepository.findOne({email: email})
         if(user && user.password === password) {
             const { password, ...result } = user;
             return result;
         }
         return null;
     }
-    // async modifyNicName()
 }

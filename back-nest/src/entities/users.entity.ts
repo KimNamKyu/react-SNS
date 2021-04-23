@@ -22,7 +22,7 @@ export class Users {
     @UpdateDateColumn()
     updatedAt: Date;
     
-    @OneToMany(() => Posts, post => post.id)
+    @OneToMany(() => Posts, post => post.userId)
     post: Posts[];
 
     @OneToMany(() => Comments, comment => comment.id)

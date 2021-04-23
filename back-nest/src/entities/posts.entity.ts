@@ -18,9 +18,11 @@ export class Posts {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToOne(() => Users, user => user.id)
-    @JoinColumn()
-    user: Users[];
+    @Column('int', {name: 'userId', nullable: true})
+    userId: number | null;
+
+    @JoinColumn([{name: 'userId', referencedColumnName: 'id'}])
+    user: Users;
 
     @ManyToMany(() => Hashtags, hashtag => hashtag.name, {  nullable: false, onDelete: 'CASCADE' })
     @JoinTable({name:'PostHashtag'})
