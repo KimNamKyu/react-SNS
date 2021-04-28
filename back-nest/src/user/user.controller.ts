@@ -1,5 +1,6 @@
-import { Request, Body, Controller, ForbiddenException, Get, NotFoundException, Post, Req, UseGuards } from '@nestjs/common';
+import { Request, Body, Controller, ForbiddenException, Get, NotFoundException, Post, Req, UseGuards, Patch, Delete } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/entities/users.entity';
@@ -8,7 +9,9 @@ import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private userService: UserService) {}    //생성자주입
+    constructor(
+        private userService: UserService,
+    ) {}    //생성자주입
 
     @Post('')
     async create(@Body() createUserDto: CreateUserDto) {
@@ -28,22 +31,17 @@ export class UserController {
         }
         // this.userService.create(createUserDto);
     }
-    @Get()
-    async getProfile(@User('email') user: Users){
-        return user || false;
-    }
 
     @UseGuards(LocalAuthGuard)
     @Post('/auth/login')
-    async logins(@User() user: Users) {
-        console.log(user)
+    async login(@User() user: Users) {
         return user;
     }
 
-    @Post('/login')
-    async login(@Body() createUserDto: CreateUserDto){
+    // @Post('/login')
+    // async login(@Body() createUserDto: CreateUserDto){
         
-        console.log('로그인 시작')
+    //     console.log('로그인 시작')
         // const result = await this.userService.login(
         //     createUserDto.email,
         //     createUserDto.password,
@@ -55,5 +53,25 @@ export class UserController {
         //     console.log('로그인 실패');
         //     throw new ForbiddenException();
         // }
+    // }
+
+    @Get('/followers')
+    async getFollow(@User() user: Users){
+
+    }
+
+    @Get('/followings')
+    async getFollowings(@User() user: Users){
+
+    }
+
+    @Patch('/:userId/follow')
+    async updateFollow(@User() user: Users) {
+
+    }
+
+    @Delete('/:userId/follow')
+    async deleteFollow(@User() user: Users) {
+
     }
 }
